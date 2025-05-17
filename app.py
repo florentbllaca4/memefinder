@@ -43,11 +43,11 @@ def evaluate_token_simple(token):
         holders = int(token.get("holders", 0))
         name = token.get("name", "").lower()
 
-        if volume >= 3000:
+        if volume >= 100:
             score += 2
-        if liquidity >= 5000:
+        if liquidity >= 500:
             score += 2
-        if holders >= 100:
+        if holders >= 10:
             score += 2
         if not any(bad in name for bad in BANNED_KEYWORDS):
             score += 1
