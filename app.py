@@ -140,6 +140,10 @@ def check_buy_sell(token):
             send_telegram_alert_sell(token, price, change_percent, "loss")
             del tracked_tokens[address]
 
+@app.get("/")
+async def root():
+    return {"message": "Bot is running. Send POST requests to /webhook/token_created"}
+
 @app.post("/webhook/token_created")
 async def token_created(request: Request):
     data = await request.json()
