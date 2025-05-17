@@ -1,9 +1,8 @@
 from fastapi import FastAPI, Request
 import requests
-import uvicorn
 import os
 from datetime import datetime
-from dotenv import load_dotenv 
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -14,7 +13,7 @@ BIRDEYE_API_KEY = os.getenv("BIRDEYE_API_KEY", "YOUR_BIRDEYE_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "YOUR_TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "YOUR_TELEGRAM_CHAT_ID")
 
-# Fjalë kyçe që tregojnë scam ose meme toks pa potencial
+# Fjalë kyçe që tregojnë scam ose meme tokens pa potencial
 BANNED_KEYWORDS = ["test", "dev", "airdrop", "rug", "scam", "pump", "elon", "420", "rekt", "fuck"]
 
 # Parametrat e strategjisë
@@ -153,5 +152,14 @@ async def token_created(request: Request):
 
     return {"status": "received"}
 
+@app.on_event("startup")
+async def startup_event():
+    try:
+        send_telegram_msg("✅ Bot-i u startua me sukses! Filloi kërkimi për token-at me potencial 🚀")
+    except Exception as e:
+        print("Nuk u dërgua mesazhi i nisjes:", e)
+
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
